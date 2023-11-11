@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <link rel="stylesheet" href="/static/style.css" />
+    <title>To Do List</title>
+  </head>
+  <body>
+    <div class="container">
+      <h1>To-Do List</h1>
+      <ul>
+        {{range .Tasks}}
+        <li>
+          <input type="checkbox" {{if .Completed}}checked{{end}} />
+          {{.Description}} (Priority: {{.Priority}}, Deadline: {{.Deadline}},
+          Category: {{.Category}})
+          <form
+            action="/delete/{{.ID}}"
+            method="post"
+            style="display: inline; float: right; margin-left: 10px"
+          >
+            <input type="submit" value="Delete" />
+          </form>
+          <form
+            action="/update/{{.ID}}"
+            method="post"
+            style="display: inline; float: right"
+          >
+            <input type="submit" value="Update" />
+          </form>
+        </li>
+        {{end}}
+      </ul>
+      <form action="/add" method="post" style="margin-top: 15px">
+        <!-- Added margin-top for separation -->
+        <input type="text" name="task" required placeholder="Task" />
+        <input type="number" name="priority" placeholder="Priority" />
+        <input type="datetime-local" name="deadline" placeholder="Deadline" />
+        <input type="text" name="category" placeholder="Category" />
+        <input type="submit" value="Add Task" />
+      </form>
+    </div>
+  </body>
+</html>

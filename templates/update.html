@@ -1,0 +1,37 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <link rel="stylesheet" href="/static/style.css" />
+    <title>Update Task</title>
+  </head>
+  <body>
+    <div class="container">
+      <h1>Update Task</h1>
+      <form action="/update/submit/" method="post">
+        <input type="hidden" name="id" value="{{.Task.ID}}" />
+        <input type="text" name="task" value="{{.Task.Description}}" required />
+        <input
+          type="number"
+          name="priority"
+          value="{{.Task.Priority}}"
+          placeholder="Priority"
+        />
+        <input
+          type="datetime-local"
+          name="deadline"
+          value="{{.Task.Deadline}}"
+          placeholder="Deadline"
+        />
+        <input
+          type="text"
+          name="category"
+          value="{{.Task.Category}}"
+          placeholder="Category"
+        />
+        <input type="submit" value="Update Task" />
+      </form>
+      <br />
+      <a href="/">Back to Task List</a>
+    </div>
+  </body>
+</html>
