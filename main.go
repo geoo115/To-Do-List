@@ -177,10 +177,24 @@ func deleteTask(w http.ResponseWriter, r *http.Request) {
 func renderUpdateTaskPage(w http.ResponseWriter, r *http.Request) {
 	taskID := r.URL.Path[len("/update/"):]
 	var task Task
-	err := db.QueryRow(`SELECT id, description, completed FROM tasks WHERE id=?;`, taskID).Scan(&task.ID, &task.Description, &task.Completed)
+	var deadlineStr sql.NullString
+
+	err := db.QueryRow(`SELECT id, description, completed, priority, deadline, category FROM tasks WHERE id=?;`, taskID).Scan(
+		&task.ID, &task.Description, &task.Completed, &task.Priority, &deadlineStr, &task.Category,
+	)
 	if err != nil {
 		http.Error(w, "Task not found", http.StatusNotFound)
 		return
+	}
+
+	// Convert the deadline string to time.Time if not NULL
+	if deadlineStr.Valid {
+		deadlineTime, err := time.Parse("2006-01-02 15:04:05-07:00", deadlineStr.String)
+		if err != nil {
+			http.Error(w, "Invalid deadline format", http.StatusBadRequest)
+			return
+		}
+		task.Deadline = &deadlineTime
 	}
 
 	tmpl, err := template.ParseFiles("templates/update.html")
@@ -200,10 +214,33 @@ func updateTask(w http.ResponseWriter, r *http.Request) {
 
 	taskID := r.FormValue("id") // Retrieve the task ID from the form
 	description := r.FormValue("task")
-
-	_, err := db.Exec(`UPDATE tasks SET description=? WHERE id=?;`, description, taskID)
+	priority, err := strconv.Atoi(r.FormValue("priority"))
 	if err != nil {
-		log.Fatal(err)
+		http.Error(w, "Invalid priority value", http.StatusBadRequest)
+		return
+	}
+
+	deadlineStr := r.FormValue("deadline")
+	var deadline *time.Time
+	if deadlineStr != "" {
+		deadlineTime, err := time.Parse("2006-01-02T15:04", deadlineStr)
+		if err != nil {
+			http.Error(w, "Invalid deadline format", http.StatusBadRequest)
+			return
+		}
+		deadline = &deadlineTime
+	}
+
+	category := r.FormValue("category")
+
+	_, err = db.Exec(`
+		UPDATE tasks
+		SET description=?, priority=?, deadline=?, category=?
+		WHERE id=?;
+	`, description, priority, deadline, category, taskID)
+	if err != nil {
+		http.Error(w, fmt.Sprintf("Error updating task: %v", err), http.StatusInternalServerError)
+		return
 	}
 
 	http.Redirect(w, r, "/", http.StatusSeeOther)

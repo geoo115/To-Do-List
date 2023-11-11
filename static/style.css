@@ -4,6 +4,15 @@ body {
     background-color: #f4f4f4;
 }
 
+.container {
+    max-width:max-content;
+    margin: 0 auto;
+    background-color: #fff;
+    padding: 20px;
+    border-radius: 5px;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
 h1 {
     color: #333;
     text-align: center;
@@ -14,24 +23,36 @@ ul {
     padding: 0;
 }
 
-li {
-    margin: 15px 0;
-font-size: 18px;
-font-family:Arial, Helvetica, sans-serif;
-    background-color: #fff;
-    padding: 10px;
-    border-radius: 5px;
-    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+table {
+    width: 100%;
+    border-collapse: collapse;
+    margin-top: 15px; /* Adjusted margin for better separation */
+}
+
+th, td {
+    border: 1px solid #ddd;
+    padding: 8px;
+    text-align: left;
+}
+
+th {
+    background-color: #333;
+    color: #fff;
+}
+
+tr:nth-child(even) {
+    background-color: #f2f2f2;
 }
 
 form {
-    display: inline;
-    margin: 0;
+    display: inline-block;
+    margin-right: 5px; /* Adjusted margin for better spacing between buttons */
 }
 
 input[type="text"],
 input[type="number"],
-input[type="datetime-local"] {
+input[type="datetime-local"],
+input[type="submit"] {
     padding: 8px;
     font-size: 14px;
     border: 1px solid #ccc;
@@ -40,45 +61,17 @@ input[type="datetime-local"] {
     margin-bottom: 10px;
 }
 
-input[type="submit"],
-button {
-    padding: 8px 16px;
-    font-size: 14px;
+input[type="submit"] {
+    background-color: #333;
     color: #fff;
     border: none;
     cursor: pointer;
-    border-radius: 4px;
 }
 
-input[type="submit"] {
-    background-color: #333;
-}
-
-button {
-    background-color: #333;
-}
-
-input[type="submit"]:hover,
-button:hover {
+input[type="submit"]:hover {
     background-color: #555;
 }
 
-a {
-    text-decoration: none;
-    color: #333;
-    margin-top: 10px;
-    display: inline-block;
-}
-
-a:hover {
-    color: #555;
-}
-
-.container {
-    max-width: 1000px;
-    margin: 0 auto;
-    background-color: #fff;
-    padding: 20px;
-    border-radius: 5px;
-    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+input[type="checkbox"] {
+    margin-right: 5px; /* Adjusted margin for better alignment with text */
 }
